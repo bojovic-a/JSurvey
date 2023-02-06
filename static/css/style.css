@@ -1,0 +1,17 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.header-top {
+    border-bottom: solid 2px #34e;
+    height: 15vh;
+    margin: auto;
+}
+
+.header-top img {
+    background-color: #34e;
+    width: 5em;
+    height: 5em;
+    margin: auto;
+}
