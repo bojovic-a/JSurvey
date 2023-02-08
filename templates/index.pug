@@ -1,8 +1,21 @@
 extends base.pug
 
+block title
+  title Home
+
 block scripts
   script(src='/jquery.js')
   script(src='/pets.js')
 
 block content
-  h1= title 
+  .container 
+    .service-cards 
+      .service-card-1 
+        img.service-card-img(src="", alt="")
+        h3 Make your account
+      .service-card-2 
+        img.service-card-img(src="", alt="")
+        h3 Post your survey
+      .service-card-3 
+        img.service-card-img(src="", alt="")
+        h3 Analize results

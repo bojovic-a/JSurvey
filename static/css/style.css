@@ -3,15 +3,231 @@
     padding: 0;
 }
 
+
+
+#header {
+    display: flex;
+    flex-direction: column;
+}
+
 .header-top {
-    border-bottom: solid 2px #34e;
-    height: 15vh;
-    margin: auto;
+    border-bottom: solid 2px #34e;    
+    display: flex;
+    justify-content: center;
+    padding: 1em;
 }
 
 .header-top img {
     background-color: #34e;
-    width: 5em;
-    height: 5em;
+    width: 8em;
+    height: 8em;    
+}
+
+.header-bottom {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10%;
+    border-bottom: solid 2px #34e;   
+}
+
+.header-bottom ul {
+    display: flex;
+    justify-content: space-around;
+    width: 40%;
+    list-style-type: none;
+    padding: 1em;
+        
+}
+
+.header-bottom ul li a {
+    color: black;
+    text-decoration: none;
+}
+
+.container {
+    margin: 0 15%;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #efefff;
+}
+
+.service-cards {
+    width: 90%;
     margin: auto;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10%;
+}
+
+form {
+    width: 40vw;
+    height: 20vw;
+    border: solid 1px #4444ff;
+    background-color: #dedeff;
+    border-radius: .5em;
+    margin-top: 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-field {
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
+    margin-bottom: 1em;
+}
+
+.form-field input {
+    height: 2em;
+    border-radius: .5em;
+    border: none;
+}
+
+.form-field label {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 600;
+}
+
+.submit-field {
+    display: flex;
+    justify-content: flex-end;
+    width: 60%;
+}
+
+.submit-field input {
+    height: 2em;
+    width: 4em;
+    background-color: #34e;
+    border: none;
+    border-radius: .5em;
+    color: white;
+}
+
+.submit-field input:hover {
+    background-color: #22c;
+}
+
+.new-question {
+    width: 90%; 
+    padding: 1em;
+    background-color: #dedeff;
+    margin: 1em;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+}
+
+#new-question-submit {
+    width: 10em;
+    background-color: #000088;
+    color: white;
+    border: none;
+    border-radius: .5em;
+    height: 4em;
+    float: right;
+}
+
+.new-question-text {
+    padding: 2em 0;
+}
+
+.new-question-text input{
+    height: 2em;
+    width: 40%;
+}
+
+.new-question-options {
+    width: 20%;
+    height: 60%;
+}
+
+.new-question p {
+    margin-bottom: 1em;
+    width: 100%;
+}
+
+.new-question a {
+    display: flex;
+    width: 10em;
+    background-color: #000088;
+    color: white;
+    border-radius: .5em;
+    margin-bottom: .5em;
+    padding: .5em;
+}
+
+.new-question-settings {
+    display: flex;
+    align-items: center;
+    margin: 2em;
+}
+
+#form-area {    
+    width: 70%;
+    height: 100%;
+}
+
+#form-area div {
+    width: 100%;
+    height: 100%;
+}
+
+#form-area form {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    padding: 1em;   
+    width: 90%;
+    height: 70%; 
+}
+
+.form-pair-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 60%;
+}
+
+#form-area input[type="textarea"] {
+    height: 7em;
+    width: 100%;
+    border: none;
+    border-radius: .5em;
+}
+
+.new-question-form-field {
+    display: flex;
+    justify-content: center;    
+}
+
+#form-area input[type="submit"] {
+    background-color: #22c;
+    color: white;
+    border: none;
+    padding: .5em;
+    float: right;
+    height: 2em;
+}
+
+.submit-area {
+    width: 100%;
+    height: 2em;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#radio-question-form {
+    overflow-y: scroll;
+}
+
+#radio-question-form input {
+    background-color: none;
+    border: none;
+    color: #000088;
+    font-weight: 700;
 }

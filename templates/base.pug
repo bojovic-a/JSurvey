@@ -2,7 +2,8 @@ html
   head
     block head_tags 
       link(rel="stylesheet" type="text/css" href="css/style.css")
-    title My Site - #{title}
+    block title
+      title My Site - #{title}
     block scripts
       script(src='/jquery.js')
 
@@ -10,20 +11,20 @@ html
     block header 
       #header 
         div(class="header-top")
-            img(class="logo-main")
+            img(class="logo-main" src="images/JSurvey-logos.jpeg")
         div(class="header-bottom")
             ul(class="navbar-left")
                 li 
                     a(href="/") Home
                 li 
-                    a(href="/") Make a survey
+                    a(href="/make-a-survey") Make a survey
                 li 
                     a(href="/") Profile            
             ul(class="navbar-right")
                 li 
-                    a(href="/") Login 
+                    a(href="/login") Login 
                 li 
-                    a(href="/") Register                           
+                    a(href="/register") Register                           
 
     block content
     block foot

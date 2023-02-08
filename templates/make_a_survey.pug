@@ -1,0 +1,20 @@
+extends base.pug
+
+block scripts
+  script(src="scripts/new_question.js") 
+
+block content 
+  .container 
+    div.new-question
+        .new-question-text
+            label(for="question-text") Question text:
+            input(type="text" name="question-text")
+        .new-question-settings
+            div.new-question-option
+                p Choose the type of answers you want?
+                a(id="question-text") Textual answer 
+                a(id="question-radio") Radio button 
+                a(id="question-checkbox") Multiple options  
+            div#form-area
+        .new-question-form-field
+            input(type="submit" value="Add question" id='new-question-submit')            
