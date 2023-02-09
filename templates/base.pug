@@ -4,14 +4,13 @@ html
       link(rel="stylesheet" type="text/css" href="css/style.css")
     block title
       title My Site - #{title}
-    block scripts
-      script(src='/jquery.js')
+    block scripts      
 
   body
     block header 
       #header 
         div(class="header-top")
-            img(class="logo-main" src="images/JSurvey-logos.jpeg")
+            img(class="logo-main" src="images/JSurvey-logos.jpeg")        
         div(class="header-bottom")
             ul(class="navbar-left")
                 li 
@@ -20,11 +19,15 @@ html
                     a(href="/make-a-survey") Make a survey
                 li 
                     a(href="/") Profile            
-            ul(class="navbar-right")
-                li 
-                    a(href="/login") Login 
-                li 
-                    a(href="/register") Register                           
+            ul(class="navbar-right")                                  
+                if (true)                  
+                  li 
+                      a(href="/logout") logout
+                else 
+                  li 
+                      a(href="/login") Login
+                  li 
+                      a(href="/register") Register                           
 
     block content
     block foot

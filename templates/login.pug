@@ -3,6 +3,7 @@ extends base.pug
 block content 
   .container 
     form(action="/login" method="POST")
+        p= error
         .form-field
             label(for="username") Username
             input(type="text" name="username")  
