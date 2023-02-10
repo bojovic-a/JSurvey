@@ -19,15 +19,17 @@ html
                     a(href="/make-a-survey") Make a survey
                 li 
                     a(href="/") Profile            
-            ul(class="navbar-right")                                  
-                if (true)                  
+                                                   
+            if(user)
+              ul(class="navbar-right")   
                   li 
-                      a(href="/logout") logout
-                else 
-                  li 
-                      a(href="/login") Login
-                  li 
-                      a(href="/register") Register                           
+                      a(href="/logout") Logout                                 
+            else              
+              ul(class="navbar-right")                         
+                    li 
+                        a(href="/login") Login 
+                    li 
+                        a(href="/register") Register 
 
     block content
     block foot

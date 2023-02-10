@@ -5,7 +5,8 @@ var bodyParser = require('body-parser');
 var mysql = require('mysql')
 const crypto = require('crypto');
 const session = require('express-session');
-var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser');
+const { type } = require('os');
 
 app.use(cookieParser());
 
@@ -48,12 +49,16 @@ var CompiledRegister = pug.compileFile('./templates/register.pug');
 var CompiledMakeASurvey = pug.compileFile('./templates/make_a_survey.pug');
 
 app.get('/', (req, resp) => {
-    console.log(session)
-    resp.send(CompiledIndex());             
+    console.log(req.session)
+    resp.send(CompiledIndex({
+        user: req.session.username
+    }));             
 });
 
 app.get('/login', (req, resp) => {
-    resp.send(CompiledLogin());
+    resp.send(CompiledLogin({
+        user: req.session.username
+    }));
 });
 
 app.post('/login', (req, resp) => {
@@ -71,13 +76,17 @@ app.post('/login', (req, resp) => {
 
         if (res.length > 0) {
             if (hashed_pass == res[0].password){
-                session.username = res[0].username
-                session.user_id = res[0].user_id
-                resp.send(CompiledIndex())
+                req.session.username = res[0].username
+                req.session.user_id = res[0].user_id
+                console.log(res[0].user_id)
+                resp.send(CompiledIndex({
+                    user: req.session.username
+                }))
             }
 
             else {
                 resp.send(CompiledLogin({
+                    user: req.session.username,
                     error: "Wrong password"
                 }))
             }
@@ -85,6 +94,7 @@ app.post('/login', (req, resp) => {
         
         else {
             resp.send(CompiledLogin({
+                user: req.session.username,
                 error: "Enter your credentials"
             }))
         }
@@ -93,7 +103,9 @@ app.post('/login', (req, resp) => {
 })
 
 app.get('/register', (req, resp) => {
-    resp.send(CompiledRegister());
+    resp.send(CompiledRegister({
+        user: req.session.username
+    }));
 });
 
 app.post('/register', (req, resp) => {
@@ -121,30 +133,60 @@ app.get('/logout', (req, resp) => {
 })
 
 app.get('/make-a-survey', (req, resp) => {
-
-    if (!session.user_id) {
+    if (!req.session.user_id) {
         resp.send(CompiledLogin({
+            user: req.session.username,
             error: "You have to be logged in to post surveys"
         }))
     }
+    if (!req.session.cur_survey){
+        user_id = req.session.user_id
+        sql = "INSERT INTO survey VALUES(null, ?, ?)"
+        console.log(user_id)
+        date = new Date()    
 
-    user_id_session = session.user_id.toString()
-    let date = new Date() 
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-    let current_date_format = `${day}-${month}-${year}`;
-
-    sql = "INSERT INTO survey VALUES(null, ?, ?)"
-
-    db.query(sql, [user_id_session, current_date_format], (err, res) => {
-        if (err) throw err;
-
-        resp.send(CompiledMakeASurvey());
-    })    
-});
+        db.query(sql, [user_id, date], (err, res) => {
+            if(err) throw err;
+            req.session.cur_survey = res['insertId']
+            survey_id = res['insertId']
+            sql = `
+                SELECT * 
+                FROM question            
+                WHERE question.survey_id=?
+            `
+            db.query(sql, [survey_id], (err, res) => {
+                if (err) throw err;
+                console.log(res)
+                q_list = []
+                q_list.push(res)
+                resp.send(CompiledMakeASurvey({
+                    questions: q_list
+                }))
+            })
+            // resp.send(CompiledMakeASurvey())
+        })
+    }
+    else {
+        survey_id = req.session.cur_survey
+            sql = `
+                SELECT * 
+                FROM question            
+                WHERE question.survey_id=?
+            `
+            db.query(sql, [survey_id], (err, res) => {
+                if (err) throw err;
+                console.log(res)
+                resp.send(CompiledMakeASurvey({
+                    questions: res
+                }))
+            })
+    }
+})
 
 app.post('/add_question', (req, resp) => {    
+
+    user_id_session = req.session.user_id
+    survey_id = req.session.cur_survey
     question_text = req.body['question-text'];
     var question_type, answer_options;
     if ("radio-option" in req.body){
@@ -155,8 +197,7 @@ app.post('/add_question', (req, resp) => {
         question_type = "checkbox"
         answer_options = req.body.radio['checkbox-option'];
     }   
-        
-    
+    console.log(req.body)
     sql = `
         INSERT INTO question VALUES(null, ?, ?, ?)
     `
@@ -166,13 +207,22 @@ app.post('/add_question', (req, resp) => {
         
         question_id = res['insertId']
         sql = "INSERT INTO answer VALUES (null, ?, ?)"
-
-        for (const answer of answer_options) {
-            db.query(sql, [question_id, answer], (err, res) => {
-                if (err) throw err;
-                resp.send(CompiledMakeASurvey())
+        
+        answer_options_list = []
+        if(typeof answer_options == 'string' || answer_options instanceof String) {
+            answer_options_list.push(answer_options)
+        }
+        else {
+            answer_options_list = answer_options
+        }
+        
+        
+        for (const answer of answer_options_list) {
+            db.query(sql, [question_id, answer], (err, result) => {
+                if (err) throw err;                
             })
         }
+        resp.redirect('/make-a-survey')
     })    
     
 
