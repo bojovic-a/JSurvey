@@ -1,24 +1,24 @@
 extends base.pug
 
+block title 
+  title Make a survey 
+
 block scripts
   script(src="scripts/new_question.js") 
 
 block content 
-  .container 
-    form.new-question(action="/add_question" method="POST")
-        .new-question-text
-            label(for="question-text") Question text:
-            em &emsp;   
-            input(type="text" name="question-text")
-        .new-question-settings
-            .new-question-option
-                p Add list of possible answers (optional)
-                a(id="question-radio") Radio button 
-                a(id="question-checkbox") Checkboxes
-            #form-area
-        .new-question-form-field
-            input(type="submit" value="Add question" id='new-question-submit')            
-
-    .all-questions-list
-      each quest in questions
-        p= quest
+  .container
+    h2 Survey name: #{title}
+    .current-questions
+    .new-question-form
+      p Question:
+      input(type="text")
+    
+      select(id="question-type")
+        option(value="") Choose question type 
+        option(value="text") Text 
+        option(value="radio") Radio 
+        option(value="checkbox") Checkbox
+    
+    
+    button(id="add-question-button") Add new question

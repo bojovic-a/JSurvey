@@ -1,0 +1,15 @@
+extends base.pug
+
+block title 
+  title Make a survey 
+
+block content
+  .container
+    form(action="/proceed_to_survey" method="POST")
+        label(for="survey-name") Survey name: 
+        input(type="text" name="survey-name")
+        br
+        label(for="survey-description") Description: 
+        input(type="text" name='survey-description')
+        br
+        input(type="submit" value="Proceed")

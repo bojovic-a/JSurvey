@@ -1,0 +1,13 @@
+doctype html 
+block title 
+    title Profile 
+
+block content 
+    .container 
+        .user-data 
+            p= user['username']
+            p= user['email']
+            a(href="/change-password") Change your password 
+
+        .user-surveys 
+        
