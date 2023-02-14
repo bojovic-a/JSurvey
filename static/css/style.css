@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 
@@ -109,4 +110,147 @@ form {
 
 .submit-field input:hover {
     background-color: #22c;
+}
+
+.new-question-form {
+    width: 80%;
+    background-color: #dedeff;
+    border-radius: 1em;
+    padding: 2em;
+    display: flex;    
+    flex-direction: column  ;        
+}
+
+.new-question-top {
+    display: flex;
+}
+
+.new-question-text {
+    display: flex;    
+    align-items: center;
+    width: 70%;
+    padding: 0;
+}
+
+.new-question-text input {
+    width: 79%;
+    height: 2em;
+    border-radius: .5em;
+    background-color: #fefefe;
+    border: none;
+}
+
+.new-question-text p {
+    font-size: 1.2em;
+    width: 20%;
+}
+
+.new-question-dropdown {
+    padding: 0;
+    width: 30%;
+}
+
+.new-question-dropdown select {
+    width: 100%;
+    border-radius: .5em; 
+    background-color: #efefef;
+    border: none;
+    height: 2em;
+}
+
+.new-question-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.new-question-bottom button {
+    height: 3em;
+    border: none;
+    border-radius: .5em;
+    background-color: #22c;
+    color: white;
+    padding: 5px;
+}
+
+.option-area {
+    width: 60%;
+    height: 15em;
+}
+
+.new-option-area {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+}
+
+.new-option-button {
+    padding: 5px;
+    border: none;
+    border-radius: .5em;
+    background-color: #4444ff;
+    color: white;
+    margin-top: 2em;
+    height: 1.5em;    
+    width: 20%;
+    font-size: .8em;    
+}
+
+.option-area input {
+    border: none;
+    background-color: #fefefe;
+    border-radius: .5em;
+    width: 70%;
+    height: 1.7em;
+    margin-top: .5em;
+}
+
+.single-option {
+    border-radius: .5em;
+    width: 50%;
+    background-color: whitesmoke;
+    color: #22c;
+    margin-top: .5em;
+    padding: 5px;
+    font-size: .8em;
+}
+
+.survey-title {
+    margin: 1.5em 0;    
+    color: rgb(0, 0, 133);
+}
+
+.current-questions {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.current-questions-item {
+    width: 90%;
+    background-color: #ddddff;
+    border-radius: 1em;
+    margin-bottom: 1em;
+    padding: 1em;
+    color: #555555;
+}
+
+.make-a-survey-heading {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 50%;
+}
+
+.make-a-survey-heading button {
+    border: none;
+    border-radius: .5em;
+    background-color: #2a1;
+    color: white;
+    width: 30%;
+    height: 3em;
 }

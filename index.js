@@ -144,6 +144,10 @@ app.get('/logout', (req, resp) => {
 })
 
 app.get('/make-a-survey', (req, resp) => {
+    if (!req.session.username) {
+        resp.redirect('/login')
+        return
+    }
     resp.send(CompiledAddSurveyName({
         user: req.session.username,
         user_id: req.session.user_id
@@ -165,107 +169,12 @@ app.post('/proceed_to_survey', (req, resp) => {
 })
 
 app.post('/save-survey', (req, resp) => {
-    questions = req.body.question
-    console.log(questions)
-    
+    questions = req.body.all_questions    
+    title = req.session.survey_name
+    description = req.session.survey_description
+    console.log(title, description, questions)
+
 })
 
-
-// app.get('/make-a-survey', (req, resp) => {
-//     console.log("\n\n\n" + req.session.user_id + "\n\n\n")
-//     if (typeof req.session.user_id == 'undefined') {
-//         console.log('jea')
-//         resp.send(CompiledLogin({
-//             error: "You have to be logged in to post your surveys"
-//         }))
-//         return
-//     }
-//     if (!req.session.cur_survey){
-//         user_id = req.session.user_id,        
-//         sql = "INSERT INTO survey VALUES(null, ?, ?, ?)"        
-//         date = new Date()    
-
-//         db.query(sql, [user_id, date, "JSurvey"], (err, res) => {
-//             if(err) throw err;
-//             req.session.cur_survey = res['insertId']
-//             survey_id = res['insertId']
-//             sql = `
-//                 SELECT * 
-//                 FROM question            
-//                 WHERE question.survey_id=?
-//             `
-//             db.query(sql, [survey_id], (err, res) => {
-//                 if (err) throw err;                
-//                 q_list = []
-//                 q_list.push(res)
-//                 resp.send(CompiledMakeASurvey({
-//                     questions: q_list,
-//                     user: req.session.username,
-//                     user_id: req.session.user_id
-//                 }))
-//             })
-//             // resp.send(CompiledMakeASurvey())
-//         })
-//     }
-//     else {
-//         survey_id = req.session.cur_survey
-//             sql = `
-//                 SELECT * 
-//                 FROM question               
-//                 WHERE question.survey_id=?
-//             `
-//             db.query(sql, [survey_id], (err, res) => {
-//                 if (err) throw err;                
-//                 resp.send(CompiledMakeASurvey({
-//                     user: req.session.username,
-//                     user_id: req.session.user_id,
-//                     questions: res
-//                 }))
-//             })
-//     }
-// })
-
-// app.post('/add_question', (req, resp) => {    
-    // console.log(req.body)
-    // user_id_session = req.session.user_id
-    // survey_id = req.session.cur_survey
-    // question_text = req.body['question-text'];
-    // var question_type, answer_options;
-    // if ("radio-option" in req.body){
-    //     answer_options = req.body['radio-option'];
-    //     question_type = "radio"
-    // }
-    // if ("checkbox-option" in req.body){
-    //     question_type = "checkbox"
-    //     answer_options = req.body['checkbox-option'];
-    // }   
-    // console.log(req.body)
-    // sql = `
-    //     INSERT INTO question VALUES(null, ?, ?, ?)
-    // `
-    // console.log(survey_id,question_text, question_type)
-    // db.query(sql, [survey_id,question_text,question_type], (err, res) => {
-    //     if (err) throw err;
-        
-    //     question_id = res['insertId']
-    //     sql = "INSERT INTO answer VALUES (null, ?, ?)"
-        
-    //     answer_options_list = []
-    //     if(typeof answer_options == 'string' || answer_options instanceof String) {
-    //         answer_options_list.push(answer_options)
-    //     }
-    //     else {
-    //         answer_options_list = answer_options
-    //     }
-        
-        
-    //     for (const answer of answer_options_list) {
-    //         db.query(sql, [question_id, answer], (err, result) => {
-    //             if (err) throw err;                
-    //         })
-    //     }
-    //     resp.redirect('/make-a-survey')
-    // })   
-// })
 
 app.listen(process.env.PORT || 5000, () => console.log("App is being served on: http://localhost:5000"));
