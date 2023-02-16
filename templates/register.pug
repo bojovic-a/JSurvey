@@ -2,7 +2,8 @@ extends base.pug
 
 block content 
   .container 
-    form(action="/register" method="POST")
+    p=error
+    form(action="/register" method="POST")    
         .form-field
             label(for="username") Username 
             input(type="text" name="username")
