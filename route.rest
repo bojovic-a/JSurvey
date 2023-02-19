@@ -1,0 +1,3 @@
+GET http://localhost:3000/jsurvey
+###
+GET http://localhost:3000/jsurvey/make-a-survey 

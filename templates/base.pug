@@ -16,20 +16,20 @@ html
                 li 
                     a(href="/") Home
                 li 
-                    a(href="/make-a-survey") Make a survey
+                    a(href="/jsurvey/make-a-survey") Make a survey
                 li 
                     a(href="/") Profile            
                                                    
             if(user)
               ul(class="navbar-right")   
                   li 
-                      a(href="/logout") Logout                                 
+                      a(href="/jsurvey/logout") Logout                                 
             else              
               ul(class="navbar-right")                         
                     li 
-                        a(href="/login") Login 
+                        a(href="/jsurvey/login") Login 
                     li 
-                        a(href="/register") Register 
+                        a(href="/jsurvey/register") Register 
 
     block content
     block foot
