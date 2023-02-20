@@ -8,7 +8,7 @@ class Question{
 
 
 // if (localStorage.getItem("questions") === "null") {
-// localStorage.setItem("questions", JSON.stringify([]))
+    // localStorage.setItem("questions", JSON.stringify([]))
 // }
 
 
@@ -108,7 +108,7 @@ function save_survey() {
     all_questions = JSON.parse(localStorage.getItem("questions"))
     console.log(all_questions)
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:5000/save-survey", true);
+    xhr.open("POST", "http://localhost:3000/jsurvey/save-survey", true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify({
         all_questions: all_questions 
