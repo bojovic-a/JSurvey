@@ -2,8 +2,9 @@ extends base.pug
 
 block content 
   .container 
-    form(action="/login" method="POST")
-        p= error
+    form(action="/jsurvey/login" method="POST")
+        p(class="message")= message
+    
         .form-field
             label(for="username") Username
             input(type="text" name="username")  

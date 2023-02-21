@@ -14,13 +14,17 @@ html
         div(class="header-bottom")
             ul(class="navbar-left")
                 li 
-                    a(href="/") Home
+                    a(href="/jsurvey/") Home
                 li 
                     a(href="/jsurvey/make-a-survey") Make a survey
+                  
+                li 
+                    a(href="/jsurvey/all_surveys") All surveys 
+                    
                 li 
                     a(href="/") Profile            
                                                    
-            if(user)
+            if(username)
               ul(class="navbar-right")   
                   li 
                       a(href="/jsurvey/logout") Logout                                 

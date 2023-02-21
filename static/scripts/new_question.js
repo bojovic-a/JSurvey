@@ -110,6 +110,7 @@ function save_survey() {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost:3000/jsurvey/save-survey", true);
     xhr.setRequestHeader('Content-Type', 'application/json');
+    localStorage.setItem("questions", JSON.stringify([]))
     xhr.send(JSON.stringify({
         all_questions: all_questions 
     }));

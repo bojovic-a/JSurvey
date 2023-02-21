@@ -10,7 +10,11 @@ const surveySchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    questions: []
+    questions: [],
+    owner: {
+        type: String,
+        required: true
+    }
 })
 
 
