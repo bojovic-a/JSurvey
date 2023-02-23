@@ -4,6 +4,7 @@ block title
   title Home
 
 block scripts 
+  script(src="scripts/fillin.js")
 
 block content
   .container 
@@ -12,9 +13,25 @@ block content
             h2 Survey: &nbsp; #{survey.title}
             h3 Description: &nbsp; #{survey.description}
         .questions 
-            for question in survey.questions 
+  
+          for question in survey.questions 
+            form(class="question-answer-form") 
+                -q = question
                 .question
                     p(class="question-title")= question.title
-                    for answer in question.answers 
-                        .answer
-                            p= answer
+                    if (question.type == 'text')
+                      .answer 
+                        input(type="text" name=question.title)
+                    else 
+                      for answer in question.answers                                                 
+                          if (question.type == 'checkbox')
+                            .answer 
+                              label= answer 
+                              input(type="checkbox" name=q.title value=answer)
+                          else 
+                            .answer
+                              label= answer 
+                              input(type="radio" name=q.title value=answer)  
+                              
+          button(id="submit-form") Save answers
+                        

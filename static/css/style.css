@@ -298,7 +298,6 @@ form {
 
 .questions {
     display: flex;
-    justify-content: center;
     flex-direction: column;
     align-items: center;
     width: 100%;
@@ -316,3 +315,29 @@ form {
     font-size: 1.2em;
     font-weight: 700;
 }
+
+.answer {
+    display: flex;
+    align-items: center;
+    margin: .5em;
+    padding: 0 1em;
+}
+
+.answer label {
+    margin: 0 1em;
+}
+
+.answer input[type="text"] {
+    width: 50%;
+    height: 6em;
+}
+
+.question-answer-form {
+    height: 100%;
+    width: 80%;
+}
+/* 
+#submit-form {
+    height: 1em;
+    widows: 3em ;
+} */
