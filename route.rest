@@ -1,5 +1,2 @@
-GET http://localhost:3000/jsurvey
-###
-GET http://localhost:3000/jsurvey/make-a-survey 
-###
-POST http://localhost:3000/jsurvey/save-survey
+
+POST http://localhost:3000/jsurvey/save_form_data

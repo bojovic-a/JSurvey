@@ -309,6 +309,18 @@ form {
     border-radius: .5em;
     padding: .5em;
     width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.question form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 1em 0;
 }
 
 .question-title {
@@ -319,17 +331,19 @@ form {
 .answer {
     display: flex;
     align-items: center;
-    margin: .5em;
-    padding: 0 1em;
+    justify-content: space-around;
+    margin-bottom: .5em;
+    width: 70%;
 }
 
 .answer label {
     margin: 0 1em;
 }
 
-.answer input[type="text"] {
-    width: 50%;
-    height: 6em;
+.answer textarea {
+    height: 3em;
+    width: 90%;
+    margin: auto;
 }
 
 .question-answer-form {
@@ -341,3 +355,9 @@ form {
     height: 1em;
     widows: 3em ;
 } */
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

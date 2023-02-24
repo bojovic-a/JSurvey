@@ -7,6 +7,7 @@ const bodyParser = require('body-parser')
 const User  = require('../models/user.js')
 const Question = require('../models/question.js')
 const Survey = require('../models/survey.js')
+const Answer = require('../models/answer.js')
 const { json } = require('body-parser')
 const crypto = require('crypto')
 const { db } = require('../models/question.js')
@@ -30,6 +31,7 @@ const makeASurvey = pug.compileFile('./templates/make_a_survey.pug')
 const addSurveyName = pug.compileFile('./templates/add_survey_name.pug')
 const fillInSurvey = pug.compileFile('./templates/answer_survey.pug')
 const allSurveysPage = pug.compileFile('./templates/all_surveys.pug')
+const infoPage = pug.compileFile('./templates/info_page.pug')
 
 //GET Home
 router.get('/', (req, res) => {
@@ -200,11 +202,51 @@ router.get('/survey', async (req, res) => {
     let thisSurvey = await Survey.find({_id: surveyId})
     console.log("Survey " + thisSurvey)
     res.send(fillInSurvey({
-        survey: thisSurvey[0]
+        survey: thisSurvey[0],
+        user_id: req.session.userId
     }))
     // } catch(err) {
     //     res.status(500).json({message: err.message})
     // }
 })
+
+//POST Answers
+router.post('/save_form_data', async (req, res) => {
+    all_answers = req.body.all_forms
+    
+    if (all_answers instanceof Array) {
+        all_answers_list = all_answers
+    }
+    else{
+        all_answers_list = []
+        all_answers_list.push(all_answers)
+    }
+    
+    for (const answer of all_answers_list) {        
+        selected_answer_list = []
+        for (const a of answer.answers){
+            selected_answer_list.push(a)
+        }
+        let ans = new Answer({
+            user_id: "1",
+            answer: selected_answer_list,
+            question_id: answer.question_id
+        })
+
+        try{
+            let insertAnswer = await ans.save()
+        } catch(err){
+            res.status(500).json({message: err.message})
+            return
+        }
+    }
+    res.set('Content-Type')
+    res.send(infoPage())
+
+})
+
+// Podesi da se podaci sa fronta salju preko forme da bi se mogle
+// renderovati stranice, napravi redirekcije nakon uspesnih operacija
+// dodavanja ankete i odgovaranja na anketu, dodaj validacije
 
 module.exports = router

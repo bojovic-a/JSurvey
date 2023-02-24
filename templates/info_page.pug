@@ -1,0 +1,13 @@
+extends base.pug
+
+block title
+  title Home
+
+block scripts 
+  script(src="scripts/fillin.js")
+
+block content
+  .container 
+    .info-container 
+        h1= info_title 
+        p= info_text
