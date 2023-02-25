@@ -35,5 +35,6 @@ function get_form_data(event) {
     xhr.send(JSON.stringify({
         all_forms: all_answers
     }))
+    location.replace("http://localhost:3000/jsurvey/thank_you_page")
     
 }   

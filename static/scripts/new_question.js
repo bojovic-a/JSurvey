@@ -115,4 +115,6 @@ function save_survey() {
         all_questions: all_questions 
     }));
 
+    location.replace("http://localhost:3000/jsurvey/survey_saved")
+
 }

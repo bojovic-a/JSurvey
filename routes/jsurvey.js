@@ -11,6 +11,7 @@ const Answer = require('../models/answer.js')
 const { json } = require('body-parser')
 const crypto = require('crypto')
 const { db } = require('../models/question.js')
+const user = require('../models/user.js')
 
 router.use(express.static('./static'))
 
@@ -32,6 +33,8 @@ const addSurveyName = pug.compileFile('./templates/add_survey_name.pug')
 const fillInSurvey = pug.compileFile('./templates/answer_survey.pug')
 const allSurveysPage = pug.compileFile('./templates/all_surveys.pug')
 const infoPage = pug.compileFile('./templates/info_page.pug')
+const userPage = pug.compileFile('./templates/user_profile.pug')
+
 
 //GET Home
 router.get('/', (req, res) => {
@@ -83,7 +86,6 @@ router.post('/save-survey', async (req, res) => {
             answers: q.answers
         })
         all_questions_obj.push(question)
-        console.log("Pitanje iz petlje" + question)
     }
     console.log(req.session.userId)
 
@@ -97,7 +99,7 @@ router.post('/save-survey', async (req, res) => {
 
     try{
         let insertedSurvey = await survey.save()
-        res.send("")
+
     }catch(err){
         res.status(500).json({message: err.message})
     }
@@ -240,13 +242,40 @@ router.post('/save_form_data', async (req, res) => {
             return
         }
     }
-    res.set('Content-Type')
-    res.send(infoPage())
-
 })
 
-// Podesi da se podaci sa fronta salju preko forme da bi se mogle
-// renderovati stranice, napravi redirekcije nakon uspesnih operacija
+
+//GET Info page after answering a survey
+router.get('/thank_you_page', (req, res) => {
+    res.send(infoPage({
+        info_title: "It's all done",
+        info_text: "Thank you for filling in this survey"
+    }))
+})
+
+
+//GET Info page after adding a survey
+router.get('/survey_saved', (req, res) => {
+    res.send(infoPage({
+        info_title: "Survey has been added successfully.",
+        info_text: "You can view this survey on your profile page"
+    }))
+})
+
+//GET User profile
+router.get('/user_profile', async (req, res) => {
+    let userId = req.session.userId
+    console.log(userId)
+    try{
+        let userDb = await User.findOne({_id: userId})        
+        res.send(userPage({
+            user: userDb
+        }))
+    } catch(err) {
+        res.status(500).json({message: err.message})
+    }
+})
+
 // dodavanja ankete i odgovaranja na anketu, dodaj validacije
 
 module.exports = router
