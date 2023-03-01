@@ -34,7 +34,7 @@ const fillInSurvey = pug.compileFile('./templates/answer_survey.pug')
 const allSurveysPage = pug.compileFile('./templates/all_surveys.pug')
 const infoPage = pug.compileFile('./templates/info_page.pug')
 const userPage = pug.compileFile('./templates/user_profile.pug')
-
+const updateUserPage = pug.compileFile('./templates/update_user.pug')
 
 //GET Home
 router.get('/', (req, res) => {
@@ -115,7 +115,8 @@ router.post('/register', async (req, res) => {
     const userToInsert = new User({
         username: req.body.username,
         email: req.body.email,
-        password: hashedPassword
+        password: hashedPassword,
+        about: req.body.about
     })
     try{
         let existingUser = await User.find({username: userToInsert.username})
@@ -267,7 +268,8 @@ router.get('/user_profile', async (req, res) => {
     let userId = req.session.userId
     console.log(userId)
     try{
-        let userDb = await User.findOne({_id: userId})        
+        let userDb = await User.findOne({_id: userId}) 
+        console.log(userDb)       
         res.send(userPage({
             user: userDb
         }))
@@ -276,6 +278,17 @@ router.get('/user_profile', async (req, res) => {
     }
 })
 
-// dodavanja ankete i odgovaranja na anketu, dodaj validacije
+router.get('/change-info', async (req, res) => {
+    userId = req.params.get
+    try{
+        let userDb = await User.findOne({_id: userId})
+        res.send(updateUserPage({
+            user: userDb
+        }))
+    }
+    catch(err) {
+        res.status(500).json({message: err.message})
+    }
+})
 
 module.exports = router

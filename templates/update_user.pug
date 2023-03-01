@@ -1,0 +1,23 @@
+extends base.pug
+block title 
+    title User 
+
+block content 
+    .container 
+        h1 User profile
+        .user-data 
+            .user-update-img 
+                img(src="images/default_profile.jpg", alt="Default profile picture")
+                p= user
+            form.user-update-text
+                p= user
+                //- label(for="username") Username: 
+                //- input(type="text" name="username" value=user.username)
+                //- label(for="email") Email:   
+                //- inout(type="email" name="email" value=user.email)
+                //- label(for="about") About:  
+                //- input(type="text" name="about" value=user.about)
+                input(type="submit" value="Confirm")
+
+        .user-surveys 
+        

@@ -66,7 +66,7 @@ h1 {
 
 form {
     width: 40vw;
-    height: 20vw;
+    height: 25vw;
     border: solid 1px #4444ff;
     background-color: #dedeff;
     border-radius: .5em;
@@ -360,4 +360,59 @@ form {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.user-data {
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    background-color: #ccccff;
+    padding: 2em;
+    border-radius: 1em;
+
+}
+
+.user-data-img,
+.user-data-text {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    margin: 0 1em;
+    text-align: left;
+}
+
+.user-data-text {
+    text-align: left;
+    font-weight: 600;
+}
+
+.user-data-img img {
+    width: 80%;
+    border-radius: 1em;
+}
+
+.user-data-text a {
+    color: #7777ff;
+}
+
+.form-field-column {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    font-weight: 600;
+    margin-bottom: 1em;
+}
+
+.form-field-column input {
+    height: 4em;
+}
+
+.about {
+    margin: 1em 0;
+    font-weight: 400;
+    border: solid 1px #4444ff;
+    border-radius: .5em;
+    padding: .5em;
 }
