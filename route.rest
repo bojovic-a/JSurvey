@@ -1,2 +1,4 @@
 
 POST http://localhost:3000/jsurvey/save_form_data
+###
+GET http://localhost:3000/jsurvey/change-password

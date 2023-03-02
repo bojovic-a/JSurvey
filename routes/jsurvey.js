@@ -35,7 +35,7 @@ const allSurveysPage = pug.compileFile('./templates/all_surveys.pug')
 const infoPage = pug.compileFile('./templates/info_page.pug')
 const userPage = pug.compileFile('./templates/user_profile.pug')
 const updateUserPage = pug.compileFile('./templates/update_user.pug')
-
+const changePasswordPage = pug.compileFile('./templates/change_password.pug')
 //GET Home
 router.get('/', (req, res) => {
     res.send(homePage())
@@ -76,7 +76,6 @@ router.post('/proceed-to-survey', (req, res) => {
 
 router.post('/save-survey', async (req, res) => {
     questions = req.body["all_questions"]
-    // console.log(questions)
     
     all_questions_obj = []
     for (const q of questions) {
@@ -87,7 +86,6 @@ router.post('/save-survey', async (req, res) => {
         })
         all_questions_obj.push(question)
     }
-    console.log(req.session.userId)
 
     const survey = new Survey({
         title: req.session.survey_title,
@@ -161,7 +159,7 @@ router.post('/login', async (req, res) => {
         }
         req.session.username = usernameCheck[0].username
         req.session.userId = usernameCheck[0]._id
-        console.log(req.session)
+
         res.send(homePage({
             username: req.session.username,
             user_id: req.session.userId
@@ -185,7 +183,6 @@ router.get('/logout', (req, res) => {
 router.get('/all_surveys', async (req, res) => {
     try{
         let allSurveys = await Survey.find()
-        console.log(allSurveys)
         res.send(allSurveysPage({
             username: req.session.username,
             user_id: req.session.userId,
@@ -200,10 +197,8 @@ router.get('/all_surveys', async (req, res) => {
 //GET Single survey
 router.get('/survey', async (req, res) => {
     surveyId = req.query.id
-    console.log("ID " + surveyId)
     // try {
     let thisSurvey = await Survey.find({_id: surveyId})
-    console.log("Survey " + thisSurvey)
     res.send(fillInSurvey({
         survey: thisSurvey[0],
         user_id: req.session.userId
@@ -266,12 +261,12 @@ router.get('/survey_saved', (req, res) => {
 //GET User profile
 router.get('/user_profile', async (req, res) => {
     let userId = req.session.userId
-    console.log(userId)
     try{
         let userDb = await User.findOne({_id: userId}) 
-        console.log(userDb)       
+    
         res.send(userPage({
-            user: userDb
+            user: userDb,
+            userId: userId
         }))
     } catch(err) {
         res.status(500).json({message: err.message})
@@ -279,16 +274,75 @@ router.get('/user_profile', async (req, res) => {
 })
 
 router.get('/change-info', async (req, res) => {
-    userId = req.params.get
+    userId = req.query.id
     try{
         let userDb = await User.findOne({_id: userId})
         res.send(updateUserPage({
             user: userDb
         }))
-    }
+    }   
     catch(err) {
         res.status(500).json({message: err.message})
     }
+})
+
+router.post('/change-info', async (req, res) => {
+    userNow = req.body
+    
+    try {
+        let userDb = await User.findOne({_id: userNow.userId})
+        userDb.username = userNow.username
+        userDb.email = userNow.email
+        userDb.about = userNow.about
+        let updateResult = await userDb.save()
+        res.send(userPage({
+            user: userDb
+        }))
+    } catch(err) {
+        res.status(500).send(err.message)       
+    }
+})
+
+router.get('/change-password', (req, res) => {
+    res.send(changePasswordPage())
+})
+
+router.post('/change-password', async (req, res) => {
+    oldPass = req.body.old_password
+    newPass = req.body.new_password
+    confirmPass = req.body.confirm_password
+    hash = crypto.createHash("sha256")
+    hash.update(oldPass)
+    hashedOldPassword = hash.digest('hex')
+
+    try {
+        let userDb = await User.findOne({_id: req.session.userId})
+        console.log(userDb)
+        if (userDb.password == hashedOldPassword) {
+            if(newPass == confirmPass){
+                hash = crypto.createHash("sha256")
+                hash.update(newPass)
+                hashedNewPassword = hash.digest('hex')
+                userDb.password = hashedNewPassword
+                await userDb.save()
+                res.redirect('/jsurvey/login')
+                return
+            }
+            else {
+                res.send(changePasswordPage({
+                    message: "Passwords do not match"
+                }))
+            }
+        }
+        else {
+            res.send(changePasswordPage({
+                message: "Incorrect old password"
+            }))
+        }
+        
+    } catch(err) {
+        res.status(500).send({message: err.message})
+    } 
 })
 
 module.exports = router

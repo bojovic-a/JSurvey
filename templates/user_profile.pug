@@ -8,11 +8,11 @@ block content
         .user-data 
             .user-data-img 
                 img(src="images/default_profile.jpg", alt="Default profile picture")
-            .user-data-text
+            .user-data-text            
                 p Username #{user.username}
                 p Email: #{user.email}
                 p(class="about")= user.about
-                a(href="/jsurvey/change-info?id=" + user._id) Change your information
+                a(href="/jsurvey/change-info?id=" + user.id) Change your information
                 a(href="/jsurvey/change-password") Change your password 
 
         .user-surveys 

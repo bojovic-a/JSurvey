@@ -8,16 +8,16 @@ block content
         .user-data 
             .user-update-img 
                 img(src="images/default_profile.jpg", alt="Default profile picture")
-                p= user
-            form.user-update-text
-                p= user
-                //- label(for="username") Username: 
-                //- input(type="text" name="username" value=user.username)
-                //- label(for="email") Email:   
-                //- inout(type="email" name="email" value=user.email)
-                //- label(for="about") About:  
-                //- input(type="text" name="about" value=user.about)
+            form(class="user-update-text" action="/jsurvey/change-info" method="POST")
+                input(type="hidden" name="userId" value=user.id)
+                label= user.id
+                label(for="username") Username: 
+                input(type="text" name="username" value=user.username)
+                label(for="email") Email:   
+                input(type="email" name="email" value=user.email)
+                label(for="about") About:  
+                input(type="text" name="about" value=user.about)
                 input(type="submit" value="Confirm")
 
-        .user-surveys 
+        .user-surveys
         
