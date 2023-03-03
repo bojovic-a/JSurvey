@@ -1,3 +1,4 @@
+doctype html
 html
   head
     <link rel="icon" type="image/x-icon" href="images/JSurvey-logos.jpeg">
@@ -22,9 +23,10 @@ html
                 li 
                     a(href="/jsurvey/all_surveys") All surveys 
                     
-                li 
-                    a(href="/jsurvey/user_profile") Profile            
-                                                   
+                if(username)
+                    li 
+                        a(href="/jsurvey/user_profile") Profile            
+                                                
             if(username)
               ul(class="navbar-right")   
                   li 

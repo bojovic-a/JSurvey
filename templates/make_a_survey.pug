@@ -8,6 +8,7 @@ block scripts
 
 block content 
   .container
+    input(type="hidden" name="user-id" value=userId)
     .make-a-survey-heading
       h2(class="survey-title") Survey name: #{title}
       button(id="save-survey") Save survey

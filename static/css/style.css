@@ -369,7 +369,7 @@ form {
     background-color: #ccccff;
     padding: 2em;
     border-radius: 1em;
-
+    height: fit-content;
 }
 
 .user-data-img,
@@ -415,4 +415,26 @@ form {
     border: solid 1px #4444ff;
     border-radius: .5em;
     padding: .5em;
+}
+
+.user-surveys {
+    height: 3.5em;
+    display: block;
+    margin-top: 2em;
+}
+
+.a-button {
+    width: 30%;
+    height: 100%;
+    border-radius: .5em;
+    background-color: #22c;
+    color: white;
+    text-decoration: none;
+    padding: .5em;
+    transition: .3s;
+}
+
+.a-button:hover {
+    background-color: #4444ff;
+    transition: .3s;
 }

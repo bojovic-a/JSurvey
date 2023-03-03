@@ -12,6 +12,7 @@ const { json } = require('body-parser')
 const crypto = require('crypto')
 const { db } = require('../models/question.js')
 const user = require('../models/user.js')
+const { type } = require('os')
 
 router.use(express.static('./static'))
 
@@ -54,10 +55,14 @@ router.get('/make-a-survey', (req, res) =>  {
     if (!req.session.username) {
         res.send(loginPage({
             message: "You have to be logged in to post a survey"
+
         }))
         return
     }
-    res.send(addSurveyName())
+    console.log(req.session)
+    res.send(addSurveyName({
+        username: req.session.username
+    }))
 })
 
 //Render create survey
@@ -69,34 +74,45 @@ router.post('/proceed-to-survey', (req, res) => {
     req.session.survey_description = survey_description
     
     res.send(makeASurvey({
-        title: survey_title
+        title: survey_title,
+        username: req.session.username,
+        userId: req.session.userId
     }))
 
 })
 
 router.post('/save-survey', async (req, res) => {
-    questions = req.body["all_questions"]
+    console.log(req.body)
+    questions = req.body
     
     all_questions_obj = []
-    for (const q of questions) {
-        const question = new Question({
-            title: q.title,
-            type: q.type,
-            answers: q.answers
-        })
-        all_questions_obj.push(question)
+    console.log(questions + "\n" + typeof questions)
+    if (typeof questions == 'string') {
+        all_questions_obj.push(questions)
+    }
+    else{
+        for (const q of questions) {
+            const question = new Question({
+                title: q.title,
+                type: q.type,
+                answers: q.answers
+            })
+            all_questions_obj.push(question)
+        }
     }
 
-    const survey = new Survey({
+    const surveyToSave = new Survey({
         title: req.session.survey_title,
         description: req.session.survey_description,
         questions: all_questions_obj,
         owner: req.session.userId
     })
+    console.log(surveyToSave)
 
 
     try{
-        let insertedSurvey = await survey.save()
+        let insertedSurvey = await surveyToSave.save()
+        res.status(200).json({message: "ALL GOOD"})
 
     }catch(err){
         res.status(500).json({message: err.message})
@@ -260,6 +276,14 @@ router.get('/survey_saved', (req, res) => {
 
 //GET User profile
 router.get('/user_profile', async (req, res) => {
+
+    if (!req.session.username) {
+        res.send(loginPage({
+            message: "Create your account"
+        }))
+        return
+    }
+
     let userId = req.session.userId
     try{
         let userDb = await User.findOne({_id: userId}) 
@@ -308,24 +332,24 @@ router.get('/change-password', (req, res) => {
 })
 
 router.post('/change-password', async (req, res) => {
-    oldPass = req.body.old_password
-    newPass = req.body.new_password
-    confirmPass = req.body.confirm_password
-    hash = crypto.createHash("sha256")
-    hash.update(oldPass)
-    hashedOldPassword = hash.digest('hex')
+    oldPass = req.body.old_password;
+    newPass = req.body.new_password;
+    confirmPass = req.body.confirm_password;
+    hash = crypto.createHash("sha256");
+    hash.update(oldPass);
+    hashedOldPassword = hash.digest('hex');
 
     try {
-        let userDb = await User.findOne({_id: req.session.userId})
-        console.log(userDb)
+        let userDb = await User.findOne({_id: req.session.userId});
+    
         if (userDb.password == hashedOldPassword) {
             if(newPass == confirmPass){
-                hash = crypto.createHash("sha256")
-                hash.update(newPass)
-                hashedNewPassword = hash.digest('hex')
-                userDb.password = hashedNewPassword
-                await userDb.save()
-                res.redirect('/jsurvey/login')
+                hash = crypto.createHash("sha256");
+                hash.update(newPass);
+                hashedNewPassword = hash.digest('hex');
+                userDb.password = hashedNewPassword;
+                await userDb.save();
+                res.redirect('/jsurvey/login');
                 return
             }
             else {
@@ -341,8 +365,25 @@ router.post('/change-password', async (req, res) => {
         }
         
     } catch(err) {
-        res.status(500).send({message: err.message})
+        res.status(500).send({message: err.message});
     } 
+})
+
+router.get('/user-surveys', async (req, res) => {
+    userId = req.session.userId;
+    try {
+        let userSurveys = await Survey.find({owner: userId})
+        console.log("User to show surveys: " + userSurveys)
+        res.send(allSurveysPage({
+            all_surveys: userSurveys
+        }))
+        
+    } catch(err) {
+        res.status(500).send(infoPage({
+            info_title: "Server error",
+            info_text: err.message
+        }))
+    }
 })
 
 module.exports = router

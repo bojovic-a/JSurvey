@@ -6,10 +6,11 @@ class Question{
     }
 }
 
-
-// if (localStorage.getItem("questions") === "null") {
-    // localStorage.setItem("questions", JSON.stringify([]))
-// }
+console.log(localStorage.getItem("questions"))
+if (localStorage.getItem("questions") === "null") {
+    localStorage.setItem("questions", JSON.stringify([]))
+    console.log("Nema, dodaje se")
+}
 
 
 window.addEventListener('load', init)
@@ -108,13 +109,30 @@ function save_survey() {
     all_questions = JSON.parse(localStorage.getItem("questions"))
     console.log(all_questions)
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/jsurvey/save-survey", true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    localStorage.setItem("questions", JSON.stringify([]))
-    xhr.send(JSON.stringify({
-        all_questions: all_questions 
-    }));
+    // xhr.open("POST", "http://localhost:3000/jsurvey/save-survey", true);
+    // xhr.setRequestHeader('Content-Type', 'application/json');
+    let userIdSession = document.getElementsByName('user-id')[0].value
+    
+    // xhr.send(JSON.stringify({
+    //     all_questions: JSON.stringify(all_questions),
+    //     userId: userIdSession
+    // }));
 
-    location.replace("http://localhost:3000/jsurvey/survey_saved")
+    fetch('/jsurvey/save-survey', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(all_questions),
+        })
+      .then(response => {
+        // Redirect to another page
+        window.location.href = 'http://localhost:3000/jsurvey/survey_saved';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    localStorage.setItem("questions", JSON.stringify([]))
+    // fetch('http://localhost:3000/jsurvey/survey_saved').then(res => console.log(res)).catch(e => console.log(e))
 
 }
