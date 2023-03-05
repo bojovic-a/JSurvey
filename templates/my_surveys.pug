@@ -1,0 +1,18 @@
+extends base.pug
+
+block title
+  title Home
+
+block scripts 
+
+block content
+  .container 
+    h1 Browse surveys
+    .all-surveys 
+        for survey in all_surveys 
+          -let id = survey._id.toString()
+          a(href="/jsurvey/edit-survey?id="+id) 
+            .survey 
+                h3= survey.title 
+                p= survey.description                 
+                

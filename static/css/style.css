@@ -438,3 +438,25 @@ form {
     background-color: #4444ff;
     transition: .3s;
 }
+
+.edit-question {
+    background-color: #ccccff;
+    border-radius: .5em;
+    width: 60%;
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+}
+
+.edit-answers {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 1em 3em;
+}
+
+#submit-edit-form {
+    width: 7em;
+    margin: auto;
+}

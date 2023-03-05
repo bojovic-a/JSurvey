@@ -9,7 +9,6 @@ class Question{
 console.log(localStorage.getItem("questions"))
 if (localStorage.getItem("questions") === "null") {
     localStorage.setItem("questions", JSON.stringify([]))
-    console.log("Nema, dodaje se")
 }
 
 
@@ -23,6 +22,10 @@ function init(){
     var question_type = document.getElementById("question-type")
     var add_question_button = document.getElementById("add-question-button")
     var save_survey_button = document.getElementById("save-survey")
+    var delete_buttons = document.getElementsByClassName('delete-button')
+    for (const button of delete_buttons) {
+        button.addEventListener('click', delete_question)
+    }
     save_survey_button.addEventListener("click", save_survey)
     add_question_button.addEventListener('click', add_question)
     question_type.addEventListener("change", render_question_type)
@@ -32,10 +35,10 @@ function fill_current_questions(){
     var current_questions =  JSON.parse(localStorage.getItem("questions")) || []
     var current_question_area = document.getElementsByClassName("current-questions")[0]
 
-    for(const question of current_questions) {
+    for(let i=0;i < current_questions.length;i++) {
         single_question = document.createElement("div")
         single_question.classList.add("current-questions-item")
-        single_question.innerHTML = `<h3>Question: ` + question.title + `</h3><p>Options: ` + question.answers +  `</p>`
+        single_question.innerHTML = `<h3>Question: ` + current_questions[i].title + `</h3><p>Options: ` + current_questions[i].answers +  `</p><button class="delete-button" id="question_` + i + `">Delete</button>`
         current_question_area.appendChild(single_question)
     }
 }
@@ -136,3 +139,15 @@ function save_survey() {
     // fetch('http://localhost:3000/jsurvey/survey_saved').then(res => console.log(res)).catch(e => console.log(e))
 
 }
+
+function delete_question(event) {
+    console.log("NJNJn  ")
+    delete_button = event.target;
+    button_id = delete_button.id;
+    id = button_id.split('_')[1];
+    console.log(id)
+    all_questions = JSON.parse(localStorage.getItem("questions"))
+    all_questions.splice(id, 1)
+    localStorage.setItem("questions", JSON.stringify(all_questions))
+    location.reload() 
+}   

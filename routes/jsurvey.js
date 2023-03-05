@@ -37,6 +37,9 @@ const infoPage = pug.compileFile('./templates/info_page.pug')
 const userPage = pug.compileFile('./templates/user_profile.pug')
 const updateUserPage = pug.compileFile('./templates/update_user.pug')
 const changePasswordPage = pug.compileFile('./templates/change_password.pug')
+const userSurveysPage = pug.compileFile('./templates/my_surveys.pug')
+const editSurveyPage = pug.compileFile('./templates/edit_survey.pug')
+
 //GET Home
 router.get('/', (req, res) => {
     res.send(homePage())
@@ -269,6 +272,7 @@ router.get('/thank_you_page', (req, res) => {
 //GET Info page after adding a survey
 router.get('/survey_saved', (req, res) => {
     res.send(infoPage({
+        username: req.session.username,
         info_title: "Survey has been added successfully.",
         info_text: "You can view this survey on your profile page"
     }))
@@ -373,8 +377,7 @@ router.get('/user-surveys', async (req, res) => {
     userId = req.session.userId;
     try {
         let userSurveys = await Survey.find({owner: userId})
-        console.log("User to show surveys: " + userSurveys)
-        res.send(allSurveysPage({
+        res.send(userSurveysPage({
             all_surveys: userSurveys
         }))
         
@@ -383,6 +386,22 @@ router.get('/user-surveys', async (req, res) => {
             info_title: "Server error",
             info_text: err.message
         }))
+    }
+})
+
+router.get('/edit-survey', async (req, res) => {
+    surveyId = req.query.id
+    console.log(surveyId)
+    try {
+        let surveyToEdit = await Survey.findOne({_id: surveyId})
+        res.send(editSurveyPage({
+            username: req.session.username,
+            survey: surveyToEdit,
+            user_id: req.session.userId
+        }))
+        return
+    } catch(err) {
+        res.status(500).json({message: err.message})
     }
 })
 
