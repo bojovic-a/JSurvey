@@ -8,7 +8,9 @@ block scripts
 
 block content
   .container 
-    .info-container 
+    .info-container   
         h1= info_title 
         p= info_text
         a(href="/jsurvey") See other surveys 
+        //- a(id="login_link" href=info_anchor_href)= info_anchor 
+        a(id="login_link" href=info_anchor_href) Login

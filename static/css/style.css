@@ -460,3 +460,11 @@ form {
     width: 7em;
     margin: auto;
 }
+
+#login_link {
+    background-color: #0000aa;
+    border-radius: .5em;
+    border: solid 2px #000099;
+    color: #ffff;
+    padding: .1em .3em;
+}

@@ -84,6 +84,7 @@ router.post('/proceed-to-survey', (req, res) => {
 
 })
 
+//Save survey to MongoDB
 router.post('/save-survey', async (req, res) => {
     console.log(req.body)
     questions = req.body
@@ -145,7 +146,11 @@ router.post('/register', async (req, res) => {
         }
         else{
             newInsert = await userToInsert.save()
-            res.send('Successful registration')
+            res.send(infoPage({
+                info_title: "Registration successful",                
+                info_anchor: "Login",
+                info_anchor_href: "/jsurvey/login"
+            }))
             return
         }
 
@@ -154,6 +159,7 @@ router.post('/register', async (req, res) => {
         return
     }
 })
+
 //POST Login
 router.post('/login', async (req, res) => {
     insertedUsername = req.body.username
@@ -301,6 +307,7 @@ router.get('/user_profile', async (req, res) => {
     }
 })
 
+//Render page for updating user info
 router.get('/change-info', async (req, res) => {
     userId = req.query.id
     try{
@@ -314,6 +321,7 @@ router.get('/change-info', async (req, res) => {
     }
 })
 
+//Update user info in database
 router.post('/change-info', async (req, res) => {
     userNow = req.body
     
@@ -331,10 +339,12 @@ router.post('/change-info', async (req, res) => {
     }
 })
 
+//Render page for changing password
 router.get('/change-password', (req, res) => {
     res.send(changePasswordPage())
 })
 
+//Change password in MongoDB
 router.post('/change-password', async (req, res) => {
     oldPass = req.body.old_password;
     newPass = req.body.new_password;
@@ -373,6 +383,7 @@ router.post('/change-password', async (req, res) => {
     } 
 })
 
+//Fetch all surveys for logged in user 
 router.get('/user-surveys', async (req, res) => {
     userId = req.session.userId;
     try {
@@ -389,6 +400,7 @@ router.get('/user-surveys', async (req, res) => {
     }
 })
 
+//TODO: Edit survey after posting
 router.get('/edit-survey', async (req, res) => {
     surveyId = req.query.id
     console.log(surveyId)
@@ -404,5 +416,13 @@ router.get('/edit-survey', async (req, res) => {
         res.status(500).json({message: err.message})
     }
 })
+
+//Test route for info page
+// router.get('/info_test', (req, res) => {
+//     res.send(infoPage({
+//         info_title: "Info title",
+//         info_text: "Info text"
+//     }))
+// })
 
 module.exports = router
