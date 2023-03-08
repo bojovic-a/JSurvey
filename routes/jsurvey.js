@@ -403,7 +403,7 @@ router.get('/user-surveys', async (req, res) => {
 //TODO: Edit survey after posting
 router.get('/edit-survey', async (req, res) => {
     surveyId = req.query.id
-    console.log(surveyId)
+    
     try {
         let surveyToEdit = await Survey.findOne({_id: surveyId})
         res.send(editSurveyPage({
@@ -411,6 +411,7 @@ router.get('/edit-survey', async (req, res) => {
             survey: surveyToEdit,
             user_id: req.session.userId
         }))
+        console.log(typeof surveyToEdit.questions)
         return
     } catch(err) {
         res.status(500).json({message: err.message})
