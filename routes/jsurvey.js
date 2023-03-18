@@ -165,6 +165,8 @@ router.post('/login', async (req, res) => {
     insertedUsername = req.body.username
     insertedPassword = req.body.password
 
+    console.log(insertedPassword, insertedUsername)
+
     hash = crypto.createHash('sha256')
     hash.update(insertedPassword)
     hashedPassword = hash.digest('hex')
@@ -176,6 +178,7 @@ router.post('/login', async (req, res) => {
             res.status(400).json("User doesn't exist")
             return
         }
+        console.log(usernameCheck)
         dbPassword = usernameCheck[0].password
         
         if (dbPassword != hashedPassword){
@@ -208,6 +211,7 @@ router.get('/logout', (req, res) => {
 router.get('/all_surveys', async (req, res) => {
     try{
         let allSurveys = await Survey.find()
+        console.log(allSurveys)
         res.send(allSurveysPage({
             username: req.session.username,
             user_id: req.session.userId,
@@ -405,14 +409,28 @@ router.get('/edit-survey', async (req, res) => {
     surveyId = req.query.id
     
     try {
-        let surveyToEdit = await Survey.findOne({_id: surveyId})
+        let surveyToEdit = await Survey.find({_id: surveyId})
         res.send(editSurveyPage({
             username: req.session.username,
-            survey: surveyToEdit,
+            survey: surveyToEdit[0],
             user_id: req.session.userId
         }))
         console.log(typeof surveyToEdit.questions)
         return
+    } catch(err) {
+        res.status(500).json({message: err.message})
+    }
+})
+
+router.post('/edit-survey', async (req, res) => {
+    editedSurvey = req.body
+    
+    try{
+        let editSurveyQuery = await Survey.findOneAndUpdate({_id: req.body.surveyId}, req.body.survey)
+        
+        res.send(infoPage({
+            info_title: "bulja"
+        }))
     } catch(err) {
         res.status(500).json({message: err.message})
     }

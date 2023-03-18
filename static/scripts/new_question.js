@@ -7,9 +7,6 @@ class Question{
 }
 
 console.log(localStorage.getItem("questions"))
-if (localStorage.getItem("questions") === "null") {
-    localStorage.setItem("questions", JSON.stringify([]))
-}
 
 
 window.addEventListener('load', init)
@@ -17,7 +14,10 @@ window.addEventListener('load', init)
 // questions = []
 // localStorage.setItem("questions", JSON.stringify(questions))
 
-function init(){
+function init(){    
+    if (!localStorage.getItem("questions")) {
+        localStorage.setItem("questions", JSON.stringify([]))
+    }
     fill_current_questions()
     var question_type = document.getElementById("question-type")
     var add_question_button = document.getElementById("add-question-button")

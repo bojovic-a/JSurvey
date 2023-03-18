@@ -12,4 +12,4 @@ const questionSchema = new mongoose.Schema({
     answers: [String]
 })
 
-module.exports = mongoose.model('Question', questionSchema)
+module.exports = mongoose.model('Question', questionSchema, "Question")

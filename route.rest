@@ -2,3 +2,27 @@
 POST http://localhost:3000/jsurvey/save_form_data
 ###
 GET http://localhost:3000/jsurvey/change-password
+###
+POST http://localhost:3000/jsurvey/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "bojke",
+    "password": "bojke"
+}
+###
+GET http://localhost:3000/jsurvey/all_surveys
+###
+POST http://localhost:3000/jsurvey/proceed-to-survey
+
+{
+    "survey-name": "survey",
+    "survey-description": "desc"
+}
+###
+GET http://localhost:3000/jsurvey/edit-survey?id=6415ff47a103796c3580a6ef
+###
+POST http://localhost:3000/jsurvey/edit-survey
+Content-Type: application/json
+
+[{"title":"Pitanje1","answers":[],"type":{}},{"title":"Pitanje2","answers":[],"type":{}}]
