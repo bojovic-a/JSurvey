@@ -22,7 +22,7 @@ block content
                   span(class="question-title-edit") #{question.title}                 
                   .answers-edit
                     each answer in question.answers 
-                      p(class="answer_"+question._id)= answer
+                      p(class="answer answer_"+question._id)= answer
                 .question-box-edit-right
                   p(class="question-type-edit")= question.type
 

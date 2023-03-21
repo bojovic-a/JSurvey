@@ -424,16 +424,20 @@ router.get('/edit-survey', async (req, res) => {
 
 router.post('/edit-survey', async (req, res) => {
     editedSurvey = req.body
-    
-    try{
-        let editSurveyQuery = await Survey.findOneAndUpdate({_id: req.body.surveyId}, req.body.survey)
-        
-        res.send(infoPage({
-            info_title: "bulja"
-        }))
-    } catch(err) {
-        res.status(500).json({message: err.message})
-    }
+    console.log(req.body.surveyId) 
+    id = req.body.surveyId.slice(1, -1);
+    // try{
+    let editSurveyQuery = await Survey.findOne({_id: id})
+    console.log(editSurveyQuery)
+    editSurveyQuery.questions = req.body.survey
+    editSurveyResult = await editSurveyQuery.save()
+    res.send(infoPage({
+        info_title : "bulja",
+        info_text : "info"
+    }))
+    // } catch(err) {
+        // res.status(500).json({message: err.message})
+    // }
 })
 
 //Test route for info page
