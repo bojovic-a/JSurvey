@@ -10,21 +10,21 @@ block content
   .container
     input(type="hidden" name="user-id" value=userId)
     .make-a-survey-heading
-      h2(class="survey-title" name=survey._id) Survey name: #{survey.title}
+      h2(class="survey-title" name=survey_id) Survey name:
       button(id="save-survey") Save survey
-    .current-questions
-      .question-boxes-edit 
-        each question in survey.questions
-          .question-box-edit(name=question._id)
-              p Click on any text to change it
-              .question-box-edit-bottom
-                .question-box-edit-left
-                  span(class="question-title-edit") #{question.title}                 
-                  .answers-edit
-                    each answer in question.answers 
-                      p(class="answer answer_"+question._id)= answer
-                .question-box-edit-right
-                  p(class="question-type-edit")= question.type
+    .current-questions      
+      .question-boxes-edit
+    //-     each question in survey.questions
+    //-       .question-box-edit(name=question._id)
+    //-           p Click on any text to change it
+    //-           .question-box-edit-bottom
+    //-             .question-box-edit-left
+    //-               span(class="question-title-edit") #{question.title}                 
+    //-               .answers-edit
+    //-                 each answer in question.answers 
+    //-                   p(class="answer answer_"+question._id)= answer
+    //-             .question-box-edit-right
+    //-               p(class="question-type-edit")= question.type
 
     .new-question-form
       .new-question-top

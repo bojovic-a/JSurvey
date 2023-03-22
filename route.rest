@@ -26,3 +26,7 @@ POST http://localhost:3000/jsurvey/edit-survey
 Content-Type: application/json
 
 [{"title":"Pitanje1","answers":[],"type":{}},{"title":"Pitanje2","answers":[],"type":{}}]
+###
+GET http://localhost:3000/jsurvey/get-survey-data?survey=6418acdab653b57e71b40545
+###
+GET http://localhost:3000/jsruvey/get-survey-data?survey=6418acdab653b57e71b40545

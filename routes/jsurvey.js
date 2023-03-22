@@ -407,19 +407,24 @@ router.get('/user-surveys', async (req, res) => {
 //TODO: Edit survey after posting
 router.get('/edit-survey', async (req, res) => {
     surveyId = req.query.id
-    
+    console.log(surveyId)
     try {
-        let surveyToEdit = await Survey.find({_id: surveyId})
+        
         res.send(editSurveyPage({
-            username: req.session.username,
-            survey: surveyToEdit[0],
+            survey_id: surveyId,
+            username: req.session.username,            
             user_id: req.session.userId
-        }))
-        console.log(typeof surveyToEdit.questions)
+        }))        
         return
     } catch(err) {
         res.status(500).json({message: err.message})
     }
+})
+
+router.get('/get-survey-data', async (req, res) => {
+    surveyId = req.query['survey']
+    let surveyToEdit = await Survey.find({_id: surveyId})
+    res.json({"survey": surveyToEdit[0]})    
 })
 
 router.post('/edit-survey', async (req, res) => {
@@ -431,6 +436,7 @@ router.post('/edit-survey', async (req, res) => {
     console.log(editSurveyQuery)
     editSurveyQuery.questions = req.body.survey
     editSurveyResult = await editSurveyQuery.save()
+    localStorage.setItem("question", JSON.stringify([]))
     res.send(infoPage({
         info_title : "bulja",
         info_text : "info"
@@ -439,6 +445,7 @@ router.post('/edit-survey', async (req, res) => {
         // res.status(500).json({message: err.message})
     // }
 })
+
 
 //Test route for info page
 // router.get('/info_test', (req, res) => {

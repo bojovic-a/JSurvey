@@ -1,6 +1,6 @@
 class Question{
     constructor(id, title, answers, type){
-        this.id = id
+        this._id = id
         this.title = title
         this.answers = answers
         this.type = type
@@ -9,13 +9,23 @@ class Question{
 
 window.addEventListener('load', init);
 
-function init() {
-    console.log(typeof localStorage.getItem("questions"))
-    if (JSON.parse(localStorage.getItem("questions")).length <1){
-        // localStorage.setItem("questions", JSON.stringify([]))
-        get_all_quesitons()
-        console.log("nj")
-    }
+function init() {        
+    surveyId = document.getElementsByClassName("survey-title")[0].getAttribute("name")
+    
+    if (!localStorage.getItem("questions")){
+        let fetchUrl = "http://localhost:3000/jsurvey/get-survey-data?survey=" + surveyId            
+        fetch(fetchUrl)
+            .then(response=>response.json())
+            .then(data => {                
+                localStorage.setItem("questions", JSON.stringify(data))                        
+            })    
+        }
+    get_all_quesitons()
+    // if (JSON.parse(localStorage.getItem("questions")).length <1){
+    //     // localStorage.setItem("questions", JSON.stringify([]))
+    //     get_all_quesitons()
+    //     console.log("nj")
+    // }
     saveAllButton = document.querySelector("#save-survey")
     saveAllButton.addEventListener("click", save_all)
     var add_question_button = document.getElementById("add-question-button")
@@ -24,40 +34,95 @@ function init() {
     question_type.addEventListener("change", render_question_type)
 }
 
-function get_all_quesitons(){
-    question_divs = document.getElementsByClassName("question-box-edit")
-    surveyId = document.getElementsByClassName("survey-title")[0].getAttribute('name')
-    localStorage.setItem("survey-id", JSON.stringify(surveyId))
-    all_questions = JSON.parse(localStorage.getItem("questions"))
+// function get_all_quesitons(){
+//     question_divs = document.getElementsByClassName("question-box-edit")
+//     surveyId = document.getElementsByClassName("survey-title")[0].getAttribute('name')
+//     localStorage.setItem("survey-id", JSON.stringify(surveyId))
+//     all_questions = JSON.parse(localStorage.getItem("questions"))
     
-    for(let i = 0;i < question_divs.length;i++) {
-        question_divs[i].setAttribute("id", i)
-        let question_title = document.getElementsByClassName("question-title-edit")[i]
-        question_title.addEventListener('click', make_it_editable)
+//     for(let i = 0;i < question_divs.length;i++) {
+//         question_divs[i].setAttribute("id", i)
+//         let question_title = document.getElementsByClassName("question-title-edit")[i]
+//         question_title.addEventListener('click', make_it_editable)
 
-        let question_type = document.getElementsByClassName("question-type-edit")[i]
-        question_type.addEventListener('click', make_it_editable)
+//         let question_type = document.getElementsByClassName("question-type-edit")[i]
+//         question_type.addEventListener('click', make_it_editable)
         
-        query = "answer_"+ question_divs[i].getAttribute('name')
+//         query = "answer_"+ question_divs[i].getAttribute('name')
 
-        let answersToThis = document.getElementsByClassName(query)      
+//         let answersToThis = document.getElementsByClassName(query)      
 
-        answersList = []
+//         answersList = []
 
-        if (answersToThis){         
-            for (const ans of answersToThis) {
-                answersList.push(ans.innerText)
-                console.log(ans)
-                ans.setAttribute("contentEditable", "true")
-                ans.addEventListener('click', make_it_editable)
+//         if (answersToThis){         
+//             for (const ans of answersToThis) {
+//                 answersList.push(ans.innerText)
+//                 console.log(ans)
+//                 ans.setAttribute("contentEditable", "true")
+//                 ans.addEventListener('click', make_it_editable)
+//             }
+//         }        
+
+//         let q = new Question(i, question_title.innerText, answersList, question_type.innerText)
+        
+//         all_questions.push(q)
+//     }
+//     localStorage.setItem("questions", JSON.stringify(all_questions))
+// }
+
+function get_all_quesitons() {
+    // Title
+    let surveyLs = JSON.parse(localStorage.getItem("questions"))
+    let titleTag = document.querySelector(".survey-title")
+    titleTag.innerText += surveyLs.survey.title    
+    // Questions
+    let allQuestionsArea = document.querySelector('.question-boxes-edit')
+    
+
+    surveyLs.survey.questions.forEach(element => {    
+                
+        // answersHtml = document.createElement('div')
+        // answersHtml.innerHTML = `<div class="answers-edit">`
+        // for (const ans of question.answers) {
+        //     let singleAnswerHtml = document.createElement("p")
+        //     singleAnswerHtml.classList.add("answer")
+        //     singleAnswerHtml.innerHTML = 
+        //     `
+        //         <p class="answer ` + ans.id + `">aaa` + ans + `</p>
+        //     `
+        //     answersHtml.appendChild()
+        // }
+            console.log(element)
+            answersHtml = '<div class="answers-edit">'
+            for (const ans of element.answers) {
+                answersHtml += '<p class="answer">' + ans + '</p>'
             }
-        }        
-
-        let q = new Question(i, question_title.innerText, answersList, question_type.innerText)
+            answersHtml += "</div>"        
+            html = `<div class="question-box-edit" name="` + element._id + `">
+                        <div class="question-box-edit-bottom">
+                            <div class="question-box-edit-left">
+                                <span class="question-title-edit">` + element.title + `</span>
+                                ` + answersHtml + `
+                            </div>
+                            <div class="question-box-edit-right">
+                                <p class="question-type-edit">` + element.type + `</p>
+                            </div>
+                        </div>
+                    </div>`
+            allQuestionsArea.innerHTML += html
         
-        all_questions.push(q)
-    }
-    localStorage.setItem("questions", JSON.stringify(all_questions))
+    });
+
+    let questionTitles = document.querySelectorAll('.question-title-edit')
+    questionTitles.forEach(element => {
+        element.addEventListener('click', make_it_editable)
+    });
+    
+    let answers = document.querySelectorAll('.answer')
+    answers.forEach(element => {
+        element.addEventListener('click', make_it_editable)
+    });
+
 }
 
 function make_it_editable(event) {
@@ -79,10 +144,13 @@ function make_it_editable(event) {
 function save_one(event) {
 
     element = event.target
-    questionId = event.target.closest('.question-box-edit').id
-    let allQuestionsLS = JSON.parse(localStorage.getItem("questions"))
+    questionId = event.target.closest('.question-box-edit').getAttribute("name")
+    console.log(questionId)
+    let allQuestionsLSRaw = JSON.parse(localStorage.getItem("questions"))
+    let allQuestionsLSEdit = allQuestionsLSRaw.survey.questions
     
     questionTitle = element.parentNode.querySelector(".question-title-edit").innerText
+
     let questionAnswers = element.parentNode.querySelectorAll(".answer")
     answersListHtml = []
 
@@ -91,19 +159,19 @@ function save_one(event) {
         answersListHtml.push(answerText)
     }
 
-    questionType = element.parentNode.nextSibling.querySelector(".question-type-edit").innerText
-
-
-    for (let i = 0;i < allQuestionsLS.length;i++) {
-        console.log(questionId)
-        if (allQuestionsLS[i].id == questionId){
+    questionType = element.closest(".question-box-edit-bottom").querySelector(".question-box-edit-right .question-type-edit").innerText    
+        
+    for (let i = 0;i < allQuestionsLSEdit.length;i++) { 
+        console.log(questionId + allQuestionsLSEdit[i].id)         
+        if (allQuestionsLSEdit[i]._id == questionId){
+            console.log("nj")
             let q = new Question(questionId, questionTitle, answersListHtml, questionType)
-            allQuestionsLS[i] = q
-            console.log(allQuestionsLS[0] + "\n" + allQuestionsLS)
+            console.log(q.title)
+            allQuestionsLSEdit[i] = q                        
         }
-    }
-
-    localStorage.setItem("questions", JSON.stringify(allQuestionsLS))
+    }    
+    allQuestionsLSRaw.questions = allQuestionsLSEdit    
+    localStorage.setItem("questions", JSON.stringify(allQuestionsLSRaw))
     element.remove()
 }
 
@@ -201,15 +269,19 @@ function add_question() {
     question_text = document.getElementsByName("question-text-input")[0].value
     question_options_elements = document.getElementsByClassName("single-option")
     question_options = question_options_elements
-    curr_questions = JSON.parse(localStorage.getItem("questions"))
+    let surveyLs = JSON.parse(localStorage.getItem("questions"))
+    console.log(surveyLs.survey.questions)
+    let curr_questions = surveyLs.survey.questions
+
     this_question_options = []
     for(const opt of question_options){this_question_options.push(opt.value)}
     lastId = curr_questions[curr_questions.length-1].id
     console.log(typeof lastId)
     question = new Question(lastId+1, question_text, this_question_options, question_type)
     curr_questions.push(question)
+    surveyLs.survey.questions = curr_questions
     console.log(curr_questions)
     
-    localStorage.setItem("questions", JSON.stringify(curr_questions))
-    location.reload()   
+    localStorage.setItem("questions", JSON.stringify(surveyLs))
+    // location.reload()   
 }
