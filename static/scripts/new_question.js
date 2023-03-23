@@ -28,8 +28,9 @@ function init(){
     }
     save_survey_button.addEventListener("click", save_survey)
     add_question_button.addEventListener('click', add_question)
-    question_type.addEventListener("change", render_question_type)
+    question_type.addEventListener("change", render_question_type)    
 }
+
 
 function fill_current_questions(){
     var current_questions =  JSON.parse(localStorage.getItem("questions")) || []
@@ -151,3 +152,20 @@ function delete_question(event) {
     localStorage.setItem("questions", JSON.stringify(all_questions))
     location.reload() 
 }   
+
+// function generate_random_question() {
+//     fetch('/jsurvey/generate-random', {
+//         method: 'GET',        
+//         })
+//       .then(response => {
+//         // Redirect to another page
+//         console.log(response)
+//         location.reload()
+//       })
+//       .catch(error => {
+//         console.error('Error:', error);
+//       });
+//     localStorage.setItem("questions", JSON.stringify([]))
+//     // fetch('http://localhost:3000/jsurvey/survey_saved').then(res => console.log(res)).catch(e => console.log(e))
+
+// }

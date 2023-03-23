@@ -518,6 +518,10 @@ form {
     width: fit-content;
 }
 
+.answers-edit {
+    min-height: .5em;
+}
+
 .answers-edit p {
     margin: .5em;
     border: solid 1px #0000aa;
@@ -530,3 +534,7 @@ form {
     width: 3em;
     height: ;
 } */
+
+.checkbox_item {
+    padding: 0;
+}
