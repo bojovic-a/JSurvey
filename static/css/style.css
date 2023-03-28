@@ -313,6 +313,7 @@ form {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: 20px;
 }
 
 .question form {
@@ -537,4 +538,46 @@ form {
 
 .checkbox_item {
     padding: 0;
+}
+
+.question-title-input {
+    margin-bottom: 2em;
+}
+
+.question-edit {
+    background-color:  #bbccdd;
+    width: 90%;
+    height: fit-content;
+    display: flex;
+    justify-content:flex-start;
+    align-items: center;
+    margin-bottom: 2em;
+}
+
+.question-left {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2em;
+}
+
+.question-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.answer-input {
+    width: 70%;
+}
+
+.question-title-input {
+    width: 80%;
+}
+
+.add-option-button {
+    width: 70%;
+    margin: auto;
 }
