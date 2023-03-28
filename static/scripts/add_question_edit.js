@@ -48,29 +48,33 @@ function print_questions() {
     for (let i=0;i < allQuestions.length;i++) {
         let answersHtml=""
 
-        if (allQuestions[i].answers.length > 0) {
-            for (let j=0;j < allQuestions[i].answers.length;j++) {
-                answersHtml += `
-                    <input class="answer-input" vlaue="${allQuestions[i].answers[j]}" placeholder="${allQuestions[i].answers[j]}"><br>
-                `
+            if (allQuestions[i].answers.length > 0) {
+                for (let j=0;j < allQuestions[i].answers.length;j++) {
+                    answersHtml += `
+                        <input class="answer-input" vlaue="${allQuestions[i].answers[j]}" placeholder="${allQuestions[i].answers[j]}"><br>
+                    `
+                }
             }
-        }
-        else {
-            answersHtml = ""
-        }
-        answersHtml += '<button class="add-option-button"> + </button>'
+            else {
+                answersHtml = ""
+            }
+            if (allQuestions[i].type != 'text'){
+                answersHtml += '<input type="text" class="new-answer-value" name="new-answer-value" placeholder="Add new option"><br><button class="add-option-button"> + </button>'
+            }
 
         let questionDiv = document.createElement("div")
-
+        console.log(allQuestions[i].id)
         questionDiv.classList.add("question-edit") 
-        questionDiv.setAttribute("id", allQuestions[i]._id)
+        questionDiv.setAttribute("id", allQuestions[i].id)
         console.log(allQuestions[i])
         questionDivHtml = `
                 <div class="question-left"> 
                     <label>Question</label>
                     <input class="question-title-input" value="${allQuestions[i].title}"><br>
-                    <label>Answers<label>
-                    ${answersHtml}
+                    <div class="answers-to-this">
+                        ${allQuestions[i].type != "text" ? '' : '<label>Answers</label>'}
+                        ${answersHtml}
+                    </div>
                 </div> 
                 <div class="question-right">
 
@@ -79,6 +83,8 @@ function print_questions() {
         questionDiv.innerHTML = questionDivHtml  
         currentQuestions.appendChild(questionDiv)
     }
+    let plusBtn = document.querySelector('.add-option-button')
+    plusBtn.addEventListener("click", add_new_option)
 
     var inputs = document.getElementsByClassName("question-left")
     for (let i = 0;i < inputs.length;i++) {
@@ -89,7 +95,7 @@ function print_questions() {
 
 function make_editable(event) {
     let saveButtonBox = event.target.closest(".question-edit")
-    console.log(saveButtonBox.querySelector(".add-option-button"))
+    
     if (!saveButtonBox.querySelector(".save-changes-button")){
         let saveButton = document.createElement("button")
         saveButton.classList.add("save-changes-button")
@@ -100,11 +106,44 @@ function make_editable(event) {
     }
 }
 
+function add_new_option(event) {
+    let plusBtn = event.target;
+    let newOptionInput = plusBtn.parentNode.querySelector(".new-answer-value");
+    let newOptionValue = newOptionInput.value
+    let questionToChange = parseInt(plusBtn.parentNode.parentNode.parentNode.id);
+    newOptionInput.value = newOptionValue
+
+    allQuestionsSession = JSON.parse(sessionStorage.getItem("questions"));
+    allQuestionsSession.survey.questions[questionToChange].answers.push(newOptionValue)
+    console.log(allQuestionsSession)
+    sessionStorage.setItem("questions", JSON.stringify(allQuestionsSession))
+    
+    let optionsDiv = document.getElementsByClassName("answers-to-this")[questionToChange]
+    let newOption = document.createElement("input")
+    // optionsDiv.innerHTML += `<input class="answer-input" vlaue="${newOptionValue}" placeholder="${newOptionValue}"><br></br>`
+    newOption.classList.add("answer-input");
+    newOption.value = newOptionValue;
+    newOption.placeholder = newOptionValue;
+
+    optionsDiv.insertBefore(newOption, optionsDiv.firstChild)
+    newOptionInput.value = ""
+    newOptionInput.focus()
+}
 
 function save_changes_one(event) {
+    let questionId = event.target.parentNode.id
+    let questionDataDiv = document.getElementsByClassName("question-left")[questionId]
+    let questionTitle = questionDataDiv.querySelector(".question-title-input").value
+
+    let allQuestionsSession = JSON.parse(sessionStorage.getItem("questions"))
+    allQuestionsSession.survey.questions[questionId].title = questionTitle;
+
+    sessionStorage.setItem("questions", JSON.stringify(allQuestionsSession))
+
     event.target.remove()
 }
 
 function save_changes() {
+    // Send sessionStorage to node
     pass
 }
