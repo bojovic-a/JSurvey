@@ -13,14 +13,32 @@ block content
             h2 Survey: &nbsp; #{survey.title}
             h3 Description: &nbsp; #{survey.description}
             input(type="hidden" name="user_id" value=user_id)
-            p= user_id            
+            input(type="hidden" name="survey_id" value=survey._id)
+            
         .questions 
   
           for question in survey.questions 
               -q = question
-              .question
-                form(name="question-answer-form" id=question._id) 
+              .question-fill
+                form(name="question-answer-form" id=question.id) 
                     p(class="question-title")= question.title
+                    if (question.type == "five") 
+                      .answer 
+                        .five-radio-pair
+                          span 1
+                          input(type="radio" name="five" value="1")
+                        .five-radio-pair
+                          span 2
+                          input(type="radio" name="five" value="2")
+                        .five-radio-pair
+                          span 3
+                          input(type="radio" name="five" value="3")
+                        .five-radio-pair
+                          span 4
+                          input(type="radio" name="five" value="4")
+                        .five-radio-pair
+                          span 5
+                          input(type="radio" name="five" value="5")
                     if (question.type == 'text')
                       .answer 
                         input(type="textarea" name=question.title)

@@ -8,6 +8,10 @@ const answerSchema = new mongoose.Schema({
     answer: {
         type: []
     },
+    survey_id: {
+        type: String,
+        required: true
+    },
     question_id: {
         type: String,
         required: true

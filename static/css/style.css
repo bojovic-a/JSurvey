@@ -588,3 +588,19 @@ form {
     width: 70%;
     margin: auto;
 }
+
+.five-radio-pair {
+    display: flex;
+    flex-direction: column;
+    margin: 1em;
+    align-items: center;
+}
+
+.question-fill form {
+    background-color: #ccccff;
+    border: solid 1px #34e;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    padding: 2.5em;
+}

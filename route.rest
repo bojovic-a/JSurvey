@@ -30,3 +30,9 @@ Content-Type: application/json
 GET http://localhost:3000/jsurvey/get-survey-data?survey=6418acdab653b57e71b40545
 ###
 GET http://localhost:3000/jsruvey/get-survey-data?survey=6418acdab653b57e71b40545
+
+###
+POST http://localhost:3000/jsurvey/edit-survey
+Content-Content-Type: application/json
+
+{"_id":"6415ff47a103796c3580a6ef","title":"bojketova anketa","description":"opis","questions":[{"id":{"$numberInt":"0"},"title":"Pitanje122","answers":[],"type":"text"},{"id":{"$numberInt":"1"},"title":"Pitanje3","answers":[],"type":"radio"}],"owner":"6415fbdd7ded0884e6aed3b3","__v":{"$numberInt":"2"}}

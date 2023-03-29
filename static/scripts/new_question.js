@@ -58,7 +58,6 @@ function render_question_type(event) {
         generate_checboxes()
     }
 
-
     
 }
 

@@ -145,5 +145,21 @@ function save_changes_one(event) {
 
 function save_changes() {
     // Send sessionStorage to node
-    pass
+    dataToServer = JSON.parse(sessionStorage.getItem("questions"))
+    
+    fetch('/jsurvey/edit-survey', {
+        method: 'POST',
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(dataToServer),
+    })
+    // .then(response=> response.json())
+    .then(response=> {
+        window.location.href = 'http://localhost:3000/jsurvey/survey_saved'
+    })
+    .catch(error => {
+        console.log("Error: " + error)
+    })
+
 }

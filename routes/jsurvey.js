@@ -239,8 +239,8 @@ router.get('/survey', async (req, res) => {
 
 //POST Answers
 router.post('/save_form_data', async (req, res) => {
-    all_answers = req.body.all_forms
-    
+    all_answers = req.body
+    console.log(all_answers)
     if (all_answers instanceof Array) {
         all_answers_list = all_answers
     }
@@ -255,13 +255,15 @@ router.post('/save_form_data', async (req, res) => {
             selected_answer_list.push(a)
         }
         let ans = new Answer({
-            user_id: "1",
+            user_id: req.body[0].user_id,
+            survey_id: req.body[0].survey_id,
             answer: selected_answer_list,
             question_id: answer.question_id
         })
 
         try{
             let insertAnswer = await ans.save()
+        
         } catch(err){
             res.status(500).json({message: err.message})
             return
@@ -428,25 +430,27 @@ router.get('/get-survey-data', async (req, res) => {
 })
 
 router.post('/edit-survey', async (req, res) => {
-    editedSurvey = req.body
-    console.log(req.body.surveyId) 
-    id = req.body.surveyId.slice(1, -1);
-    // try{
-    let editSurveyQuery = await Survey.findOne({_id: id})
-    console.log(editSurveyQuery)
-    editSurveyQuery.questions = req.body.survey
-    editSurveyResult = await editSurveyQuery.save()
-    localStorage.setItem("question", JSON.stringify([]))
-    res.send(infoPage({
-        info_title : "bulja",
-        info_text : "info"
-    }))
+    let changedSurvey = req.body
+    console.log(changedSurvey)
+    let surveyId = changedSurvey._id
+
+
+    // let newDocObj = {
+    //     title: 
+    // }
+
+    try {
+        let queryUpdate = await Survey.replaceOne({_id : surveyId}, changedSurvey)
+        res.status(200).json({message: "Sve kul"})
+    } catch(err) {
+        res.status(400).json({message: err.message})
+        console.log(err.message)
+    }
+
     // } catch(err) {
         // res.status(500).json({message: err.message})
     // }
 })
-
-
 //Test route for info page
 // router.get('/info_test', (req, res) => {
 //     res.send(infoPage({
@@ -456,3 +460,12 @@ router.post('/edit-survey', async (req, res) => {
 // })
 
 module.exports = router
+
+// {
+//     "_id":{"$oid":"6415ff47a103796c3580a6ef"},
+//     "title":"bojketova anketa",
+//     "description":"opis",
+//     "questions":[{"id":{"$numberInt":"0"},"title":"Pitanje1","answers":[],"type":"text"},{"id":{"$numberInt":"1"},"title":"Pitanje3","answers":[],"type":"radio"}],
+//     "owner":"6415fbdd7ded0884e6aed3b3",
+//     "__v":{"$numberInt":"2"}
+// }
