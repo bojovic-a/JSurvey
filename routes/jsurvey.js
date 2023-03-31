@@ -13,6 +13,7 @@ const crypto = require('crypto')
 const { db } = require('../models/question.js')
 const user = require('../models/user.js')
 const { type } = require('os')
+const {ObjectId} = require('bson')
 
 router.use(express.static('./static'))
 
@@ -39,6 +40,7 @@ const updateUserPage = pug.compileFile('./templates/update_user.pug')
 const changePasswordPage = pug.compileFile('./templates/change_password.pug')
 const userSurveysPage = pug.compileFile('./templates/my_surveys.pug')
 const editSurveyPage = pug.compileFile('./templates/edit_survey.pug')
+const resultsPage = pug.compileFile('./templates/results_preview.pug')
 
 //GET Home
 router.get('/', (req, res) => {
@@ -228,6 +230,7 @@ router.get('/survey', async (req, res) => {
     surveyId = req.query.id
     // try {
     let thisSurvey = await Survey.find({_id: surveyId})
+    console.log(thisSurvey[0].questions)
     res.send(fillInSurvey({
         survey: thisSurvey[0],
         user_id: req.session.userId
@@ -254,9 +257,10 @@ router.post('/save_form_data', async (req, res) => {
         for (const a of answer.answers){
             selected_answer_list.push(a)
         }
+        
         let ans = new Answer({
             user_id: req.body[0].user_id,
-            survey_id: req.body[0].survey_id,
+            survey_id: req.body[0].survey_id,   
             answer: selected_answer_list,
             question_id: answer.question_id
         })
@@ -391,11 +395,14 @@ router.post('/change-password', async (req, res) => {
 
 //Fetch all surveys for logged in user 
 router.get('/user-surveys', async (req, res) => {
+    let context = req.query.con
+    console.log(context)
     userId = req.session.userId;
     try {
         let userSurveys = await Survey.find({owner: userId})
         res.send(userSurveysPage({
-            all_surveys: userSurveys
+            all_surveys: userSurveys,
+            page_context: context
         }))
         
     } catch(err) {
@@ -430,42 +437,64 @@ router.get('/get-survey-data', async (req, res) => {
 })
 
 router.post('/edit-survey', async (req, res) => {
-    let changedSurvey = req.body
-    console.log(changedSurvey)
-    let surveyId = changedSurvey._id
+    let changedSurvey = req.body.survey
+    let surveyId = new ObjectId(changedSurvey._id)
 
-
-    // let newDocObj = {
-    //     title: 
-    // }
+    allQuesstionsObject = []
+    for(let i = 0;i < changedSurvey.questions.length; i++){
+        let question = new Question({
+            title: changedSurvey.questions[i].title,
+            type: changedSurvey.questions[i].type,
+            answers: changedSurvey.questions[i].answers
+        })
+        allQuesstionsObject.push(question)
+    }
+    console.log(allQuesstionsObject)
+    // let querySelect = await Survey.findOne({_id: surveyId})
+    // querySelect.title = changedSurvey.title
+    // querySelect.description = changedSurvey.description
+    // querySelect.questions = allQuesstionsObject
 
     try {
-        let queryUpdate = await Survey.replaceOne({_id : surveyId}, changedSurvey)
-        res.status(200).json({message: "Sve kul"})
+        let queryUpdate = Survey.updateMany({_id : surveyId}, {
+            title: changedSurvey.title,
+            description: changedSurvey.description,
+            questions: allQuesstionsObject
+        }, (err, result) =>{
+            if (err) {throw err}
+            res.json({message: result})
+        })
+        // /res.status(200).json({message: "Sve kul"})
     } catch(err) {
         res.status(400).json({message: err.message})
         console.log(err.message)
     }
-
-    // } catch(err) {
-        // res.status(500).json({message: err.message})
-    // }
 })
-//Test route for info page
-// router.get('/info_test', (req, res) => {
-//     res.send(infoPage({
-//         info_title: "Info title",
-//         info_text: "Info text"
-//     }))
-// })
+
+
+router.get('/view-results', async (req, res) => {
+    let userId = req.session.userId
+    let surveyId = req.query.id
+    console.log(surveyId)
+    try{
+        let survey = await Survey.findOne({_id: surveyId})
+
+        if(survey.owner == userId) {
+            let answers = await Answer.find({survey_id: surveyId})
+            // res.json(answers)
+            res.send(resultsPage({
+                all_answers: answers 
+            }))
+
+        }
+        else {
+            res.json({message: "Ne moze"})
+        }
+    } catch(err) {
+        res.status(400).json({message: err.message})
+    }
+    
+})
+
 
 module.exports = router
-
-// {
-//     "_id":{"$oid":"6415ff47a103796c3580a6ef"},
-//     "title":"bojketova anketa",
-//     "description":"opis",
-//     "questions":[{"id":{"$numberInt":"0"},"title":"Pitanje1","answers":[],"type":"text"},{"id":{"$numberInt":"1"},"title":"Pitanje3","answers":[],"type":"radio"}],
-//     "owner":"6415fbdd7ded0884e6aed3b3",
-//     "__v":{"$numberInt":"2"}
-// }

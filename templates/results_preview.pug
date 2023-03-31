@@ -1,0 +1,22 @@
+extends base.pug
+
+block title
+  title Home
+
+block scripts 
+
+block content
+  .container 
+    h1 Survey results 
+    table(class="results-table")
+        thead 
+            tr
+                th Question ID 
+                th User ID 
+                th Answer 
+        tbody 
+            for answer in all_answers
+                tr 
+                    td= answer.question_id
+                    td= answer.user_id
+                    td= answer.answer

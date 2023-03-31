@@ -11,8 +11,13 @@ block content
     .all-surveys 
         for survey in all_surveys 
           -let id = survey._id.toString()
-          a(href="/jsurvey/edit-survey?id="+id) 
-            .survey 
-                h3= survey.title 
-                p= survey.description                 
-                
+          if page_context == 'edit'
+            a(href="/jsurvey/edit-survey?id="+id) 
+              .survey 
+                  h3= survey.title 
+                  p= survey.description                 
+          else 
+            a(href="/jsurvey/view-results?id="+id) 
+              .survey 
+                  h3= survey.title 
+                  p= survey.description                 

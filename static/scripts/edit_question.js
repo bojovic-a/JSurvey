@@ -51,10 +51,11 @@ function print_questions() {
             if (allQuestions[i].answers.length > 0) {
                 for (let j=0;j < allQuestions[i].answers.length;j++) {
                     answersHtml += `
-                        <input class="answer-input" vlaue="${allQuestions[i].answers[j]}" placeholder="${allQuestions[i].answers[j]}"><br>
+                        <input class="answer-input" ><br>
                     `
                 }
             }
+            //${allQuestions[i].answers[j]}
             else {
                 answersHtml = ""
             }
@@ -65,7 +66,7 @@ function print_questions() {
         let questionDiv = document.createElement("div")
         console.log(allQuestions[i].id)
         questionDiv.classList.add("question-edit") 
-        questionDiv.setAttribute("id", allQuestions[i].id)
+        questionDiv.setAttribute("id", i)
         console.log(allQuestions[i])
         questionDivHtml = `
                 <div class="question-left"> 
@@ -82,6 +83,12 @@ function print_questions() {
         `
         questionDiv.innerHTML = questionDivHtml  
         currentQuestions.appendChild(questionDiv)
+        
+        let answerInput = questionDiv.querySelectorAll(".answer-input")
+        for (let j=0;j < allQuestions[i].answers.length;j++) {
+            answerInput[j].value = allQuestions[i].answers[j]
+        }
+
     }
     let plusBtn = document.querySelector('.add-option-button')
     plusBtn.addEventListener("click", add_new_option)
@@ -132,11 +139,21 @@ function add_new_option(event) {
 
 function save_changes_one(event) {
     let questionId = event.target.parentNode.id
+    
     let questionDataDiv = document.getElementsByClassName("question-left")[questionId]
     let questionTitle = questionDataDiv.querySelector(".question-title-input").value
-
+    let questionDiv = document.querySelectorAll(".question-edit")[questionId]
+    let answerInputs = questionDiv.querySelectorAll(".answer-input")
+    let answersLiss = []
     let allQuestionsSession = JSON.parse(sessionStorage.getItem("questions"))
     allQuestionsSession.survey.questions[questionId].title = questionTitle;
+    
+    for (let i=0;i < answerInputs.length;i++) {
+        answersLiss.push(answerInputs[i].value)
+    }
+    console.log(allQuestionsSession.survey.questions[questionId].answers)
+    allQuestionsSession.survey.questions[questionId].answers = answersLiss
+    console.log(allQuestionsSession.survey.questions[questionId].answers)
 
     sessionStorage.setItem("questions", JSON.stringify(allQuestionsSession))
 

@@ -604,3 +604,31 @@ form {
     height: fit-content;
     padding: 2.5em;
 }
+
+.results-table {
+    width: 80%;
+}
+
+.results-table,
+.results-table th,
+.results-table tr,
+.results-table td {
+    border: solid 1px grey;
+}
+
+.results-table th {
+    background-color: #111199;
+    color: white;
+}
+
+.results-table tr:nth-child(odd) {
+    background-color: #aaaaff;
+}
+
+.results-table tr:nth-child(even) {
+    background-color: #ccccff;
+}
+
+.results-table td {
+    padding: .5em;
+}
