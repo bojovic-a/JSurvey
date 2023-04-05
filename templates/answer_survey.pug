@@ -19,8 +19,7 @@ block content
   
           for question in survey.questions 
               -q = question
-              .question-fill
-                p= question._id
+              .question-fill                
                 form(name="question-answer-form" id=question._id) 
                     p(class="question-title")= question.title
                     if (question.type == "five") 

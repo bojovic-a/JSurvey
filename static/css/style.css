@@ -332,7 +332,7 @@ form {
 .answer {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     margin-bottom: .5em;
     width: 70%;
 }
